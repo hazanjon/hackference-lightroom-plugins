@@ -1,0 +1,66 @@
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<br>
+<span style="font-size: 20px">Exposure</span>
+<button type="button" class="btn btn-default" onclick="changesetting('Exposure2012', -3)">-3</button>
+<button type="button" class="btn btn-default" onclick="changesetting('Exposure2012', -2)">-2</button>
+<button type="button" class="btn btn-default" onclick="changesetting('Exposure2012', -1)">-1</button>
+<button type="button" class="btn btn-default" onclick="changesetting('Exposure2012', 0)">0</button>
+<button type="button" class="btn btn-default" onclick="changesetting('Exposure2012', 1)">1</button>
+<button type="button" class="btn btn-default" onclick="changesetting('Exposure2012', 2)">2</button>
+<button type="button" class="btn btn-default" onclick="changesetting('Exposure2012', 3)">3</button>
+<br><br>
+<span style="font-size: 20px">Contrast</span>
+<button type="button" class="btn btn-default" onclick="changesetting('Contrast2012', -80)">-80</button>
+<button type="button" class="btn btn-default" onclick="changesetting('Contrast2012', -40)">-40</button>
+<button type="button" class="btn btn-default" onclick="changesetting('Contrast2012', 0)">0</button>
+<button type="button" class="btn btn-default" onclick="changesetting('Contrast2012', 40)">40</button>
+<button type="button" class="btn btn-default" onclick="changesetting('Contrast2012', 80)">80</button>
+<br><Br>
+<img style="max-width: 100%; max-height:400px" id="image" src="/export/export.jpg?force">
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+io = io.connect()
+
+// Emit ready event, and wait for acknowledgement.
+// io|.emit('ready', {hey: 'server'}, function(data) {
+//     alert(data.success)
+// })
+io.on('upimage', function() {
+	replaceImage();
+})
+
+function changesetting(setting, value){
+	
+var img = document.getElementById("image");
+img.src = "/export/ajax-loader.gif?t=" + new Date().getTime();
+io.emit('setting', {"set": setting, "val": value}, function(data) {
+    //alert(data.success)
+})
+}
+
+function replaceImage() {
+	var img = document.getElementById("image");
+    img.src = "/export/export.jpg?t=" + new Date().getTime();
+    
+}
+
+function repeat() {
+
+    // your function code here
+    
+	replaceImage();
+    setTimeout(repeat, 2000);
+}
+
+//repeat();
+</script>
